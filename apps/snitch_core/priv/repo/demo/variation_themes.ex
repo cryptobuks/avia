@@ -11,18 +11,27 @@ defmodule Snitch.Demo.VariationTheme do
     def create_variation_themes do
         Repo.delete_all(VariationTheme)
         option_types = get_option_type
-        option_ids = for option <- option_types, do: to_string(option.id)
-        create_variation_theme!("color", [Enum.at(option_ids, 0)])
-        create_variation_theme!("size", [Enum.at(option_ids, 1)])
-        create_variation_theme!("color-size", option_ids)
+        for i <- 1..length(option_types),
+        do: option_types |> Combination.combine(i) |> create_variations
     end
 
-    def create_variation_theme!(name, option_type_ids) do
+    def create_variations(option_combination) do
+        for options <- option_combination, do: create_variation(options)
+    end
+
+    def create_variation(options) do
+        option_ids = for option <- options, do: to_string(option.id)
+        option_names = for option <- options, do: option.name
+        create_variation_theme(Enum.join(option_names, "-"), option_ids)
+    end
+
+    def create_variation_theme(name, option_type_ids) do
         params = %{
-          "name" => name,
-          "option_type_ids" => option_type_ids
+            "name" => name,
+            "option_type_ids" => option_type_ids
         }
-        %VariationTheme{} |> VariationTheme.create_changeset(params) |> Repo.insert!
+
+        %VariationTheme{} |> VariationTheme.create_changeset(params) |> Repo.insert!()
     end
 
 end
