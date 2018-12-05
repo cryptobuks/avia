@@ -1,4 +1,4 @@
-export function addEventToProductFormButtons() {
+export function add_event_to_product_form_buttons() {
     document.getElementById("form-save-publish-btn").onclick = function() {
         var form = document.getElementsByTagName("form")[0];
         document.getElementById("form-state").value = "active";
