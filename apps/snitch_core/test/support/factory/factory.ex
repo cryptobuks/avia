@@ -269,12 +269,6 @@ defmodule Snitch.Factory do
     }
   end
 
-  def product_with_default_image(_context) do
-    attrs = %{images: [build(:image)]}
-
-    [product_with_default_image: insert(:product, attrs)]
-  end
-
   def order_with_user(_context) do
     attrs = %{user: build(:user)}
 
